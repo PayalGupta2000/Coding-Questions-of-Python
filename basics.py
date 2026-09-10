@@ -532,4 +532,67 @@ This means the job is scheduled according to the specified cron expression.
 A scheduler determines when a task should run automatically, whereas a background job is a task that is executed 
 asynchronously by a worker. A scheduled task can itself enqueue a background job.
 
+# What is frappe.enqueue()
+frappe.enqueue() is used to add a function to Frappe's background job queue so that it can be processed asynchronously 
+by a worker instead of blocking the current request.
+
+# Why do we use background jobs?
+We use background jobs for time-consuming operations so that the user doesn't have to wait for the operation to complete 
+and the web request remains responsive.
+Examples:
+
+Sending bulk emails
+Large data processing
+Generating reports
+External API calls
+Data migration
+
+# What happens if a scheduler job takes a long time?
+If the scheduled task is time-consuming, I would avoid doing all the processing directly in the scheduler function. Instead,
+ I would enqueue the heavy work as a background job so that a worker can process it asynchronously.
+
+# What are workers in Frappe
+Workers are background processes that pick jobs from the job queues and execute them
+short
+default
+long
+
+# How do you check whether a scheduled job is running?
+You can check the RQ Worker / background jobs, scheduler status, logs, and relevant Frappe monitoring screens depending on the version and setup.
+
+From Bench, you can also inspect processes:
+bench doctor
+or 
+bench --site site1.local show-pending-jobs
+
+# What is bench doctor?
+bench doctor is a diagnostic command that helps check the status of workers and background jobs and can help identify scheduler or 
+queue-related problems.
+
+# What happens if the scheduler is disabled?
+Scheduled jobs will not be triggered automatically while the scheduler is disabled. Once the scheduler is enabled and running properly,
+ scheduled processing can resume.
+
+# How do you enable or disable the scheduler?
+bench --site site1.local enable-scheduler
+
+bench --site site1.local disable-scheduler
+
+# What is scheduler_events?
+scheduler_events is a hook in Frappe's hooks.py that allows developers to register functions that should execute periodically.
+
+# Suppose you want a function to run every 5 minutes. What will you do?
+scheduler_events = {
+    "cron": {
+        "*/5 * * * *": [
+            "my_app.tasks.my_function"
+        ]
+    }
+}
+
+For a non-standard interval such as every five minutes, I would use a cron expression in scheduler_events
+
+# What if the scheduler function fails?
+I would first check the Error Log and background job/worker logs, identify the exception, fix the root cause, 
+and then verify that the scheduled job executes successfully again.
 
