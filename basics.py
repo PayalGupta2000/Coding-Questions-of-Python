@@ -388,3 +388,148 @@ A local variable is defined inside a function and can normally be accessed only 
 # What is the difference between an instance variable and a class variable in Python
 An instance variable belongs to a particular object and can have different values for different objects,
  whereas a class variable belongs to the class and is generally shared among all objects of that class.
+
+# What is Rest API
+REST API stands for Representational State Transfer Application Programming Interface.
+REST API is a way for two applications to communicate with each other over HTTP using standard methods
+like GET, POST, PUT, and DELETE.
+
+# If a function is outsside the class and is not an api also then how you override it
+If a standalone function is outside a class and there is no standard Frappe hook or extension point available,
+ we can use monkey patching to replace the original function at runtime with our custom function. However, it should
+  be used carefully because it can make upgrades and maintenance more difficult.
+
+# If the function is an api then how to overeride it
+I can override it using the override_whitelisted_methods hook in hooks.py. I create my custom function in my app and map
+ the original method path to my custom method. This allows me to customize the API behavior without modifying the core ERPNext
+  code.
+
+# what is moneky patch
+Monkey patching is a technique in Python where we replace or modify an existing function or method at runtime without changing
+ its original source code. In Frappe, it can be used when a standalone function doesn't have a standard hook or override 
+ mechanism. However, it should be used carefully because it can cause maintenance and upgrade issues.
+
+# What is indexing
+Indexing is a database technique used to improve the speed of data retrieval. An index is created on one or more columns,
+ which allows the database to find records faster instead of scanning the entire table. However, indexes require additional 
+ storage and can make INSERT, UPDATE, and DELETE operations slightly slower.
+
+# What are the different types of reports in Frappe?
+Frappe mainly provides three types of reports: Report Builder, Query Report, and Script Report.”
+
+Report Builder → No-code, based mainly on a single DocType.
+Query Report → Uses SQL queries.
+Script Report → Uses Python for complex logic and calculation
+
+# What is Report Builder?
+“Report Builder is a no-code reporting tool in Frappe. We can select fields, apply filters, 
+sorting, grouping, and generate reports without writing SQL or Python code.”
+
+# What is a Query Report?
+A Query Report is a report where we use SQL queries to fetch and display data from the database.
+ It is useful when we need joins, conditions, aggregation, or data from multiple DocTypes
+
+SELECT
+    name,
+    customer,
+    grand_total
+FROM `tabSales Invoice`
+WHERE docstatus = 1;
+
+# What is a Script Report?
+A Script Report is a Python-based report. We use it when the report requires complex business logic, 
+calculations, multiple queries, or data processing that is difficult to achieve with a single SQL query.
+
+def execute(filters=None):
+    columns = []
+    data = []
+
+    return columns, data
+
+# Difference between Query Report and Script Report?
+Query Report	                            Script Report
+Uses SQL	                                Uses Python
+Good for straightforward data retrieval	    Good for complex business logic
+Mainly database query based	                Can use Python + SQL + Frappe APIs
+Less flexible	                            More flexible
+
+# How do you create a Script Report?
+First I create a new Report and select Script Report as the report type. For a standard app report, I enable Developer Mode 
+and set Is Standard to Yes. Frappe creates the report files, where I define filters in the JavaScript file and report logic
+ in the Python file.
+
+# What is the execute() function in a Script Report?
+execute() is the main entry point of a Script Report. It receives filters and returns the columns 
+and data that should be displayed in the report.
+
+# What is the difference between frappe.get_list() and SQL in reports?
+frappe.get_list() is useful when I want to retrieve DocType records using Frappe's ORM and permission system. SQL gives me 
+more flexibility for complex joins, aggregations, and database-level calculations. I choose based on the report requirement
+
+# Can a Script Report use SQL?
+Yes. A Script Report can use both Python and SQL.
+ We can use Frappe database methods such as frappe.db.sql() when we need complex database queries.
+
+for ex- data = frappe.db.sql("""
+    SELECT customer, SUM(grand_total) AS total
+    FROM `tabSales Invoice`
+    WHERE docstatus = 1
+    GROUP BY customer
+""", as_dict=True)
+
+# What is as_dict=True?
+as_dict=True makes the SQL result return each row as a dictionary instead of a tuple, which makes
+ it easier to access fields by their names
+
+# How can you show a chart in a Script Report?
+A Script Report can return a chart configuration along with columns and data. Frappe then displays the chart in the report.
+The execute() function can return additional values such as chart and report_summary.
+
+# What is Report Summary?
+Report Summary is used to display important calculated values at the top of a report, such as Total Sales, Total Outstanding, or Total Profit.
+
+# What is a Prepared Report?
+A Prepared Report is used for reports that take a long time to execute. Instead of running the report synchronously and making the user wait, Frappe
+ queues the report as a background job and generates the result separately.
+
+# If a report is very slow, what will you do?
+First, I would check the SQL query and database indexes, reduce unnecessary joins and fields, and check whether filters are
+ being used efficiently. For a complex Script Report, I would optimize the Python logic and database queries. If the report
+  is inherently long-running, I would consider using a Prepared Report or background job.
+
+# Can we create a report without writing code?
+Yes. We can use Report Builder. It allows users to create reports using fields, filters, sorting, grouping, 
+and aggregation without writing Python or SQL.
+
+# What is the role of .js and .py files in a Script Report?
+.js is mainly used for the report's frontend configuration, such as filters and client-side behavior..py`
+contains the server-side Python logic that generates the report data.
+
+# What is a scheduler in Frappe?
+Scheduler is a background process in Frappe that automatically executes scheduled jobs at defined intervals. It is 
+commonly used for tasks like sending emails, updating records, generating recurring documents, and other automated operations.
+
+# How do you create a scheduled job in Frappe?
+I can define scheduled functions in scheduler_events inside hooks.py and specify the frequency such as hourly, 
+daily, weekly, or monthly.
+
+# What are the different scheduler frequencies?
+scheduler_events = {
+    "all": [],
+    "hourly": [],
+    "daily": [],
+    "weekly": [],
+    "monthly": [],
+    "cron": {}
+}
+You can also use a cron expression when you need a custom schedule.
+
+# What is cron in Frappe scheduler?
+Cron allows us to execute a scheduled job at a specific time or according to a custom schedule using a cron expression
+This means the job is scheduled according to the specified cron expression.
+
+# What is the difference between scheduler and background job?
+A scheduler determines when a task should run automatically, whereas a background job is a task that is executed 
+asynchronously by a worker. A scheduled task can itself enqueue a background job.
+
+
