@@ -1,0 +1,14 @@
+What is Fastapi?
+Fastapi is a webframework of python and it is used for backend developement and for develope web applications.
+
+Why we use fast api? or advantage of fast api?
+1.  Fastapi is faster than all other web frameworks. If I want to develop a web application which handle complex requests so I will use
+    it.
+
+2.  Fast api support microservices which means If we want to build application in multiple chunks or parts.
+
+
+Path Params and Query Params?
+Path params - when we send the number or a key in the path. Ex- http//:127:0:0:8000/products/1
+
+Query paramms - when we send multiple query in the paths using ?. http///:127:0:0:8000/products?id=1&name=laptop&count=10

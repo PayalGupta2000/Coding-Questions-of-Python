@@ -343,7 +343,7 @@ repeatedly as long as givven condtion is true.
 # difference between for loop and for each
 A for loop is a general-purpose looping statement that can iterate over an iterable or work with indexes. A foreach loop is
  specifically intended to iterate directly over each element of a collection. Python doesn't have a separate foreach keyword;
-  its for loop is commonly used for foreach-style iteration.
+  its for loop is commonly used for foreach--style iteration.
 
 # What is the difference between == and is in Python?
 == is used to compare the values of two objects, whereas is is used to check whether two variables refer to the same object
@@ -413,6 +413,9 @@ Monkey patching is a technique in Python where we replace or modify an existing 
 Indexing is a database technique used to improve the speed of data retrieval. An index is created on one or more columns,
  which allows the database to find records faster instead of scanning the entire table. However, indexes require additional 
  storage and can make INSERT, UPDATE, and DELETE operations slightly slower.
+
+############################# Report Related Questions ###################################
+
 
 # What are the different types of reports in Frappe?
 Frappe mainly provides three types of reports: Report Builder, Query Report, and Script Report.”
@@ -504,6 +507,10 @@ and aggregation without writing Python or SQL.
 # What is the role of .js and .py files in a Script Report?
 .js is mainly used for the report's frontend configuration, such as filters and client-side behavior..py`
 contains the server-side Python logic that generates the report data.
+
+
+
+########################## Scheduler Related Question #####################################
 
 # What is a scheduler in Frappe?
 Scheduler is a background process in Frappe that automatically executes scheduled jobs at defined intervals. It is 

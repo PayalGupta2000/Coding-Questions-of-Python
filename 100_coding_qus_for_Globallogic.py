@@ -41,3 +41,4 @@ for i in range(power):
     result = result * num
 
 print("Result =", result)
+
